@@ -24,16 +24,11 @@ export function fetchPv(pv) {
   })
 }
 
-export function createArticle(title, summary, content, authorID, status, published) {
+export function createArticle(data) {
   return request({
     url: '/article/create',
     method: 'post',
-    data: { title: title,
-      summary: summary,
-      content: content,
-      authorID: authorID,
-      status: status
-    }
+    data: data
   })
 }
 
@@ -41,6 +36,6 @@ export function updateArticle(data) {
   return request({
     url: '/article/update',
     method: 'post',
-    data
+    data: data
   })
 }

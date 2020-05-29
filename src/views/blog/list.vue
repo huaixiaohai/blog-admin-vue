@@ -10,26 +10,19 @@
       <el-table-column width="180px" align="center" label="Date">
         <template slot-scope="scope">
           <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
-          <!-- <span>{{ scope.row.timestamp }}</span> -->
         </template>
       </el-table-column>
 
       <el-table-column width="120px" align="center" label="Author">
         <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
+          <span>{{ getAuthorName(scope.row.authorId) }}</span>
         </template>
       </el-table-column>
-
-      <!-- <el-table-column width="100px" label="Importance">
-        <template slot-scope="scope">
-          <svg-icon v-for="n in +scope.row.importance" :key="n" icon-class="star" class="meta-item__icon" />
-        </template>
-      </el-table-column> -->
 
       <el-table-column class-name="status-col" label="Status" width="110">
         <template slot-scope="{row}">
           <el-tag :type="row.status | statusFilter">
-            {{ row.status }}
+            {{ row.status==1 ? "published" : "Draft" }}
           </el-tag>
         </template>
       </el-table-column>
@@ -60,6 +53,7 @@
 <script>
 import { fetchList } from '@/api/article'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+import { searchUser } from '@/api/remote-search'
 
 export default {
   name: 'ArticleList',
@@ -82,10 +76,12 @@ export default {
       listQuery: {
         page: 1,
         limit: 20
-      }
+      },
+      userListOptions: []
     }
   },
   created() {
+    this.getRemoteUserList()
     this.getList()
   },
   methods: {
@@ -93,10 +89,24 @@ export default {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
-        console.log(this.list)
         this.total = response.data.total
         this.listLoading = false
       })
+    },
+    getRemoteUserList() {
+      searchUser().then(response => {
+        if (!response.data.items) return
+        this.userListOptions = response.data.items.map(v => v)
+      })
+    },
+    getAuthorName(id) {
+      console.log(id)
+      console.log(this.userListOptions)
+      const author = this.userListOptions.find((n) => n.id === id)
+      if (author) {
+        return author.name
+      }
+      return ''
     }
   }
 }
