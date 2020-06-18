@@ -12,7 +12,7 @@
         :on-success="handleSuccess"
         :before-upload="beforeUpload"
         class="editor-slide-upload"
-        action="https://httpbin.org/post"
+        action="https://www.mocky.io/v2/5185415ba171ea3a00704eed/posts/"
         list-type="picture-card"
       >
         <el-button size="small" type="primary">
@@ -63,11 +63,12 @@ export default {
       this.dialogVisible = false
     },
     handleSuccess(response, file) {
+      console.log('hand;eSuccess')
       const uid = file.uid
       const objKeyArr = Object.keys(this.listObj)
       for (let i = 0, len = objKeyArr.length; i < len; i++) {
         if (this.listObj[objKeyArr[i]].uid === uid) {
-          this.listObj[objKeyArr[i]].url = response.files.file
+          this.listObj[objKeyArr[i]].url = URL.createObjectURL(file.raw)
           this.listObj[objKeyArr[i]].hasSuccess = true
           return
         }

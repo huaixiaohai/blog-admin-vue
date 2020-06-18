@@ -60,7 +60,7 @@ import Sticky from '@/components/Sticky' // 粘性header组件
 import { fetchArticle, createArticle, updateArticle } from '@/api/article'
 import { searchUser } from '@/api/remote-search'
 import Warning from './Warning'
-import Upload from '@/components/Upload/SingleImage3'
+import Upload from '@/components/Upload/SingleImage4'
 
 // const defaultForm = {
 //   status: '', // 文章状态
