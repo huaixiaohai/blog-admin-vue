@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { base64 } from '../../../src/utils'
 export default {
   name: 'SingleImageUpload4',
   props: {
@@ -43,8 +44,6 @@ export default {
   },
   computed: {
     imageUrl() {
-      console.log('aaaa')
-      console.log(this.value)
       return this.value
     }
   },
@@ -63,8 +62,12 @@ export default {
       this.emitInput(url)
     },
     handleChange(file, fileList) {
-      const url = URL.createObjectURL(file.raw)
-      this.emitInput(url)
+      base64(file.raw).then(res => {
+        this.emitInput(res) // 将base64字符串push一个数组，传到后端
+      })
+      // const url = URL.createObjectURL(file.raw)
+      // console.log('url===========>  ' + url)
+      // this.emitInput(url)
       // console.log('handleChange')
     }
   }
