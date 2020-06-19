@@ -1,16 +1,32 @@
 <template>
   <div>
-    <el-upload
+    <!-- <el-upload
       :on-preview="handlePictureCardPreview"
       :on-remove="handleRemove"
       :on-success="handleImageSuccess"
       :show-file-list="false"
-      action="https://www.mocky.io/v2/5185415ba171ea3a00704eed/posts/"
+      :auto-upload="false"
+      action="#"
     >
       <i class="el-icon-plus" />
+    </el-upload> -->
+
+    <el-upload
+      class="upload-demo"
+      action="#"
+      :on-preview="handlePreview"
+      :on-remove="handleRemove"
+      :on-success="handleImageSuccess"
+      :show-file-list="false"
+      :on-change="handleChange"
+      :auto-upload="false"
+    >
+      <el-button slot="trigger" size="small" type="primary">选取配图</el-button>
+      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
     </el-upload>
+
     <div class="avatar">
-      <span class="demonstration">配图</span>
+      <!-- <span class="demonstration">配图</span> -->
       <el-image :src="imageUrl" />
     </div>
   </div>
@@ -27,6 +43,8 @@ export default {
   },
   computed: {
     imageUrl() {
+      console.log('aaaa')
+      console.log(this.value)
       return this.value
     }
   },
@@ -34,15 +52,20 @@ export default {
     handleRemove(file, fileList) {
       this.emitInput('')
     },
-    handlePictureCardPreview(file) {
+    handlePreview(file) {
     },
     emitInput(val) {
       this.$emit('input', val)
     },
     handleImageSuccess(res, file) {
-      // console.log(this.imageUrl)
+      // console.log('handleImageSuccess')
       const url = URL.createObjectURL(file.raw)
       this.emitInput(url)
+    },
+    handleChange(file, fileList) {
+      const url = URL.createObjectURL(file.raw)
+      this.emitInput(url)
+      // console.log('handleChange')
     }
   }
 }

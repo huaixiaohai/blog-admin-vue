@@ -11,9 +11,10 @@
         :on-remove="handleRemove"
         :on-success="handleSuccess"
         :before-upload="beforeUpload"
+        :on-change="handleChange"
+        :auto-upload="false"
         class="editor-slide-upload"
-        action="https://www.mocky.io/v2/5185415ba171ea3a00704eed/posts/"
-        list-type="picture-card"
+        action="#"
       >
         <el-button size="small" type="primary">
           Click upload
@@ -74,7 +75,23 @@ export default {
         }
       }
     },
+    handleChange(file, fileList) {
+      // this.beforeUpload(file)
+      this.listObj[file.uid] = { hasSuccess: false, uid: file.uid, width: this.width, height: this.height }
+      console.log('handleChange')
+      const uid = file.uid
+      const objKeyArr = Object.keys(this.listObj)
+      // const _URL = window.URL || window.webkitURL
+      for (let i = 0, len = objKeyArr.length; i < len; i++) {
+        if (this.listObj[objKeyArr[i]].uid === uid) {
+          this.listObj[objKeyArr[i]].url = URL.createObjectURL(file.raw)
+          this.listObj[objKeyArr[i]].hasSuccess = true
+          return
+        }
+      }
+    },
     handleRemove(file) {
+      console.log('handleRemove')
       const uid = file.uid
       const objKeyArr = Object.keys(this.listObj)
       for (let i = 0, len = objKeyArr.length; i < len; i++) {
@@ -85,6 +102,7 @@ export default {
       }
     },
     beforeUpload(file) {
+      console.log('beforeUpload')
       const _self = this
       const _URL = window.URL || window.webkitURL
       const fileName = file.uid
